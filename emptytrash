@@ -1,0 +1,76 @@
+#! /bin/zsh
+
+# Optionally, #! /bin/bash if you prefer.  
+# Should be funcionally the same
+
+# (C) David Eisenhardt
+# https://github.com/deisenhardt/emptytrash/
+
+#{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}
+# functions  {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}
+#{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}
+
+usage() {
+  printf "\n Usage: sudo emptytrash \
+          \n\n If Finder cannot empty trash, sudo can. Useful for messages like the following \
+          \n\n “Trash” can’t be opened right now because it’s being used by another task, \
+          \n such as moving or copying an item or emptying the Trash. Try again when the \
+          \n current task is complete. \
+          \n\t\t Skip Stop Continue "
+}
+
+sudo_check() {
+  if [ "$(id -u)" -ne 0 ]; then
+    printf "\n\t$0 must be run as sudo\n\n"
+    usage && exit 3
+  else
+    sudook=1
+  fi
+}
+
+kill_trash_pid() {
+
+  # two possible approaches: for or while loop
+  # the tr puts all pids on one line, for the for loop
+  # otherwise we would echo | read -r while; do; done
+
+  pids=$(lsof | grep Trash | awk '{print $2}' | sort -u | tr "\n" " ")
+  #pids=$(lsof | grep Trash | awk '{print $2}' | sort -u)
+
+
+  # since wc -w outputs whitespace before its numeric value
+  # we can't do arithmetic unless we take the value without the whitespace
+  pidcount=$(echo "$pids" | wc -w | awk '{print $1}')
+
+  if (( "$pidcount" == 0 )); then
+    printf "no PIDs to kill\n" 
+  elif (( "$pidcount" == 1 )); then
+    printf "killing PID $pids\n"
+  else 
+    # we know wc -w will not output a negative or non-numeric value
+    # so we don't need any more maths
+
+    printf "killing PIDs \n$pids\n"
+  fi
+
+
+  # echo "$pids" |
+  # while read pid ; do
+  #   kill -9 $pid
+  # done
+ 
+  for pid in "$pids" ; do
+    kill -9 $pid
+  done
+
+}
+
+###########################################################################
+# main ####################################################################
+###########################################################################
+
+sudo_check
+
+kill_trash_pid
+
+rm -rf ~/.Trash/*
