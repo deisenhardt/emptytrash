@@ -45,6 +45,7 @@ kill_trash_pid() {
 
   if (( "$pidcount" == 0 )); then
     printf "no PIDs to kill\n" 
+    nopids=1
   elif (( "$pidcount" == 1 )); then
     printf "killing PID $pids\n"
   else 
@@ -59,11 +60,12 @@ kill_trash_pid() {
   # while read pid ; do
   #   kill -9 $pid
   # done
- 
-  for pid in "$pids" ; do
-    kill -9 $pid
-  done
 
+ if [ -z "$nopids" ]; then
+    for pid in "$pids" ; do
+      kill -9 $pid
+    done
+  fi
 }
 
 ###########################################################################
