@@ -66,6 +66,10 @@ kill_trash_pid() {
       kill -9 $pid
     done
   fi
+
+  printf "\n Trash should be empty now, unless any Trash dialogue remains open. \
+          \n Otherwise, Trash should be empty once all dialogues are closed \n\n"
+
 }
 
 ###########################################################################
