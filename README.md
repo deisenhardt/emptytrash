@@ -9,3 +9,5 @@ current task is complete.
 
                                          [ Skip ] [ Stop ] [ Continue ]
 
+
+note: sometimes the script may fail to kill a pid but will still empty trash anyway.  This will be clearly stated in stdout if it occurs, and you should investigate the pid further as needed.
