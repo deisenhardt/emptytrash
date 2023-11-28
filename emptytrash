@@ -1,15 +1,40 @@
-#! /bin/zsh
+#! /bin/bash
 
-# Optionally, #! /bin/bash if you prefer.  
-# Should be funcionally the same
+#HELP00:           Script Name:  emptytrash
+#HELP01:               Purpose:  empty stubborn trash bin with the power of sudo
+#HELP02:                 Owner:  David Eisenhardt
+#HELP03:               License:  GPL v3
+#HELP04:               Created:  2004
+#HELP05:              Category:  system utility
+#HELP06:            Input File:  stdin
+#HELP07:           Output File:  stdout
+#HELP08:              Log path:  na
+#HELP09:                Syntax:  sudo emptytrash
+#HELP10:               Example:  sudo emptytrash
+#HELP11:              Commands:  kill, rm
+#HELP12:      Production Files:  ~/.Trash
+#HELP13:    Ancillary Programs:  finder
+#HELP14:     Ancillary Scripts:  na
+#HELP15:         Local Scripts:  no dependencies
+#HELP16: crontask/systemd srvc:  na
+#HELP17: task/service schedule:  na
+#HELP18:        Kernel Version:  Darwin >8.0
+#HELP19:            DB Version:  na
+#HELP20:            Audit Date:  
+#HELP21:               Auditor:
+#HELP22:       Approve Date(s):
+#HELP23:           Approver(s):
+#HELP24: Date Checked Into CVS:
+#HELP25:   Checked Into CVS By:
+#HELP26:               Version:  1.2
+#HELP27:               Changes:  formatting
+#HELP28:            Github url:  https://github.com/deisenhardt/emptytrash/
+#HELP29:
+#HELP30:
 
-# (C) David Eisenhardt
-# https://github.com/deisenhardt/emptytrash/
-# GPL v2.0
-
-#{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}
-# functions  {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}
-#{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}
+#{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}
+# Define functions {}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}
+#{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}
 
 usage() {
   printf "\n Usage: sudo emptytrash \
@@ -38,7 +63,6 @@ kill_trash_pid() {
   pids=$(lsof | grep Trash | awk '{print $2}' | sort -u | tr "\n" " ")
   #pids=$(lsof | grep Trash | awk '{print $2}' | sort -u)
 
-
   # since wc -w outputs whitespace before its numeric value
   # we can't do arithmetic unless we take the value without the whitespace
   pidcount=$(echo "$pids" | wc -w | awk '{print $1}')
@@ -55,7 +79,6 @@ kill_trash_pid() {
     printf "killing PIDs \n$pids\n"
   fi
 
-
   # echo "$pids" |
   # while read pid ; do
   #   kill -9 $pid
@@ -69,15 +92,18 @@ kill_trash_pid() {
 
   printf "\n Trash should be empty now, unless any Trash dialogue remains open. \
           \n Otherwise, Trash should be empty once all dialogues are closed \n\n"
-
 }
 
-###########################################################################
-# main ####################################################################
-###########################################################################
+##############################################################
+# main program ###############################################
+##############################################################
 
 sudo_check
 
 kill_trash_pid
 
 rm -rf ~/.Trash/*
+
+##############################################################
+# End ########################################################
+##############################################################
